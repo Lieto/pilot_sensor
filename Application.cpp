@@ -12,6 +12,7 @@ Application::Application(int argc, char **argv) {
 
     m_parameters = new Parameters();
     m_parameters->parse_from_command_line(argc, argv);
+    m_average_time_per_frame = 0;
 
  }
 
@@ -197,7 +198,6 @@ void Application::Run()
     boost::timer t;
     double frame_processing_time;
     double total_processing_time = 0.0;
-    double time_per_frame;
     int frame_counter = 0;
 
 
@@ -245,8 +245,8 @@ void Application::Run()
         // Average frame processing time
         cout << "Number of processed frames: " << frame_counter << endl;
         cout << "Total processing time: " << total_processing_time << endl;
-        time_per_frame = total_processing_time / frame_counter;
-        cout << "Average time per frame: " << time_per_frame << endl;
+        m_average_time_per_frame = total_processing_time / frame_counter;
+        cout << "Average time per frame: " << m_average_time_per_frame << endl;
 
         // Draw detections on the frame
         if (m_parameters->m_display != 0) {
@@ -263,7 +263,7 @@ void Application::Run()
 
     }
 
-    cout << "Average frame processing time: " << time_per_frame << endl;
+    cout << "Average frame processing time: " << m_average_time_per_frame << endl;
 
     WriteResults();
     // Stop loop with interrupt
@@ -292,6 +292,8 @@ void Application::WriteResults() {
     csv_string += to_string(m_parameters->m_desired_frame_rate) + ";";
     // Write scale factor
     csv_string += to_string(m_parameters->m_scale_factor) + ";";
+    // Write average processing time per frame
+    csv_string += to_string(m_average_time_per_frame) + ";";
 
     // Write detected people in clip
     std::vector<Person> people;

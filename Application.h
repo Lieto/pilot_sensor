@@ -64,6 +64,7 @@ public:
     //std::map<long, DetectedPerson> m_detectedPeopleMap;
 
     time_t m_frameTimestamp;
+    double m_average_time_per_frame;
     bool m_status;
     sig_atomic_t m_stop;
 
