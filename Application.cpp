@@ -183,6 +183,14 @@ bool Application::isCloserTo(Point origPoint, Point comparePoint, Point adPoint)
     float distanceComp = (adPoint.x - comparePoint.x)^2 + (adPoint.y - comparePoint.y )^2;
     return distanceComp < distanceOrig;
 }
+void signalHandler( int signum ) {
+
+    cout << "Interrupt signal(" << signum << ") received. \n";
+
+    exit(signum);
+}
+
+
 
 void Application::Run()
 {
@@ -190,6 +198,9 @@ void Application::Run()
     double frame_processing_time;
     double total_processing_time = 0.0;
     double time_per_frame;
+    int frame_counter = 0;
+
+
 
     // Start loop to detections, tracking, etc....
     while (true) {
@@ -202,10 +213,13 @@ void Application::Run()
             break;
         }
 
+
         // Skip frames depending on desired frame rate
         if ((m_frameNo % m_skip_frames) != 0) {
             continue;
         }
+
+        frame_counter++;
 
         // Do resizing, grayscaling depending on parameters
         m_preprocessed_frame = m_preprocessor->Process(m_original_frame);
@@ -229,9 +243,10 @@ void Application::Run()
 
 
         // Average frame processing time
-        cout << "Number of frames: " << m_frameNo << endl;
+        cout << "Number of processed frames: " << frame_counter << endl;
         cout << "Total processing time: " << total_processing_time << endl;
-        time_per_frame = total_processing_time / m_frameNo;
+        time_per_frame = total_processing_time / frame_counter;
+        cout << "Average time per frame: " << time_per_frame << endl;
 
         // Draw detections on the frame
         if (m_parameters->m_display != 0) {
@@ -269,6 +284,8 @@ void Application::WriteResults() {
         csv_string += to_string(m_parameters->m_input_camera) + ";";
     }
 
+    // Write timestamp
+    csv_string += to_string(time(0)) + ";";
     // Write original frame rate
     csv_string += to_string(m_parameters->m_framerate) + ";";
     // Write desired frame rate
