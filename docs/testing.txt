@@ -1,0 +1,32 @@
+Tests:
+
+Test with Logitec camera (resolution 1080*768) and avi file (640*480) with 3 persons
+
+Parameters:
+
+Desired frame rate:
+25.0 10.0 5.0
+
+Resolution:
+Logitech camera:
+1024*768
+
+Scale:
+1.0 0.75 0.5
+
+Outputs:
+Detected person count
+Average frame processing time
+
+
+Csv file:
+
+1: File name or camera id
+2: Timestamp
+3: Original frame rate
+4: Desired frame rate
+5: Scale factor
+6: Average frame processing time
+7: Detected people
+
+
